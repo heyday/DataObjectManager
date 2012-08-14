@@ -881,12 +881,47 @@ class DataObjectManager_Popup extends Form {
 	public function getFileFields()
 	{
 		$file_fields = array();
-		foreach($this->Fields() as $field) {
-			if($field instanceof FileIFrameField || $field instanceof ImageField)
+
+		foreach ($this->Fields() as $field) {
+			if ($this->instanceOfFileFields($field)) {
 				$file_fields[] = $field;
+			} else if ($field instanceof TabSet) {
+				foreach ($field->Tabs() as $tab) {
+					foreach ($tab->Fields() as $field) {
+						if ($this->instanceOfFileFields($field)) {
+							$file_fields[] = $field;
+						}
+					}
+				}
+			}
 		}
-		return !empty($file_fields)? $file_fields : false;	
+
+		return !empty($file_fields) ? $file_fields : false;
 	}
+    
+    protected function instanceOfFileFields($field)
+    {
+        $existingClasses = array();
+        $possibleClasses = array(
+            'FileIFrameField',
+            'KickAssetField',
+            'UploadifyField'
+        );
+        
+        foreach($possibleClasses as $className){
+            if(class_exists($className)){
+                $existingClasses[] = $className;
+            }
+        }
+        
+        foreach($existingClasses as $className){
+            if($field instanceof $className){
+                return true;
+            }
+        }
+        
+        return false;        
+    }
 	
 	public function getNestedDOMs()
 	{
