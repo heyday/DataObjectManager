@@ -30,8 +30,10 @@ $.fn.DataObjectManager.init = function(obj) {
 
 		// For Nested DOMs
 		if(nested) {
+		// Cache iframe html in a variable so it can be accessed later
+      var $mainIframe = $('<div id="iframe_'+$container.attr('id')+'" class="iframe_wrap" style="display:none;"><a href="javascript:void(0)" class="nested-close">close</a><iframe src="" frameborder="0" height="1"></iframe></div>');
       $('body').append(
-         $('<div id="iframe_'+$container.attr('id')+'" class="iframe_wrap" style="display:none;"><a href="javascript:void(0)" class="nested-close">close</a><iframe src="" frameborder="0" width="450" height="1"></iframe></div>')
+         $mainIframe
       );
       var $iframeWrap = $('#iframe_'+$container.attr('id'));
   		$container.find('a.popup-button').unbind('click').click(function(e) {
@@ -39,13 +41,23 @@ $.fn.DataObjectManager.init = function(obj) {
 				var $iframe = $iframeWrap.find('iframe');
         $iframe.attr('src',$link.attr('href'));
         //$('body').css({'opacity':.3});
+
+        // Get the iframe width from the rel
+        var w = $(this).attr('rel');
+        w = w ? w : 430;
+        var width = new String(w) + 'px';
+        // Set the iframe width to width
+        $mainIframe.find('iframe:first').css({width:width});
+
         top = $.fn.DataObjectManager.getPageScroll()[1] + ($.fn.DataObjectManager.getPageHeight() / 10);
         $iframeWrap.show().css({
         	'position':'absolute',
         	'z-index':'999',
         	'left':'50%',
         	'top' : top,
-        	'margin-left':'-215px'
+        	// Set iframe wrapper width and margin-left
+            'width': width,
+        	'margin-left':'-'+(parseInt(w) / 2)+'px'
         }).addClass('loading');
         $iframe.load(function() {
 	        iframe_height = $iframe.contents().find('body').height()+36;

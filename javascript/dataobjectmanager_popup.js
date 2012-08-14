@@ -1,8 +1,7 @@
 (function($) {
   $(function() {
     var ie = $.browser.msie;
-    $('body').removeClass('loading');
-		$('iframe').css({'width':'433px'});		
+    $('body').removeClass('loading');		
 
 		var iframe_height = window.parent.jQuery('#facebox iframe').height(); // - 82;
     var diff = $('body').height() - $('#field-holder').height();
