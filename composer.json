@@ -1,0 +1,9 @@
+{
+    "name": "unclecheese/dataobject_manager",
+    "type": "silverstripe-module",
+    "require": {
+        "composer/installers": "1.0.0",
+        "unclecheese/uploadify": "1.0.0"
+    },
+    "minimum-stability": "dev"
+}
