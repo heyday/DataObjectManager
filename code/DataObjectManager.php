@@ -239,7 +239,7 @@ class DataObjectManager extends ComplexTableField
 	        $SNG = singleton($this->sourceClass); 			
 			foreach(parent::Headings() as $field) {
                 // If the source class doesn't own this field, then its parent might.	
-                while(!$SNG->hasOwnTableDatabaseField($field->Name) && $parentKls = get_parent_class($SNG->class)) {
+                while(!$SNG->hasMethod('hasOwnTableDatabaseField') && !$SNG->hasOwnTableDatabaseField($field->Name) && $parentKls = get_parent_class($SNG->class)) {
                   $SNG = singleton($parentKls);
                 }
 				if($SNG->hasDatabaseField($field->Name))	
